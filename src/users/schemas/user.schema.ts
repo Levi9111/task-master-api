@@ -12,6 +12,9 @@ export class User extends Document {
   email: string;
 
   @Prop({ required: true })
+  password: string;
+
+  @Prop({ type: [String], default: [] })
   refreshToken: string[];
 
   @Prop({ type: String, enum: Role, default: Role.Memeber })
