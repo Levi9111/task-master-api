@@ -65,7 +65,7 @@ export class AuthService {
 
     // generate accessToken
     const accessToken = this.jwtService.sign(payload);
-    // Generate refreshToken
+    // Generate refreshToken(generating refresh manually)
     const refreshToken = this.jwtService.sign(payload, {
       secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
       expiresIn: this.configService.get<string>(
