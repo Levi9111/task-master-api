@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { User } from './schemas/user.schema';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -16,5 +17,21 @@ export class UsersService {
 
   async findByEmail(email: string): Promise<User | null> {
     return this.userModel.findOne({ email }).exec();
+  }
+
+  async findById(userId: string): Promise<User | null> {
+    return this.userModel.findById(userId).exec();
+  }
+
+  async addRefreshToken(
+    userId: string | Types.ObjectId,
+    refreshToken: string,
+  ): Promise<void> {
+    const salt = await bcrypt.genSalt(10);
+    const hashedToken = await bcrypt.hash(refreshToken, salt);
+
+    await this.userModel.findByIdAndUpdate(userId, {
+      $push: { refreshToken: hashedToken }, // Adds to the array for multi-device support
+    });
   }
 }

@@ -8,11 +8,13 @@ import { UsersService } from 'src/users/users.service';
 import { RegisterDto } from './dto/register.dto';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from './dto/login.dto';
+import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UsersService,
     private readonly jwtService: JwtService, // injecting JWT service
+    private readonly configService: ConfigService,
   ) {}
 
   async register(registerDto: RegisterDto) {
@@ -61,8 +63,22 @@ export class AuthService {
       role: user.role,
     };
 
+    // generate accessToken
+    const accessToken = this.jwtService.sign(payload);
+    // Generate refreshToken
+    const refreshToken = this.jwtService.sign(payload, {
+      secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
+      expiresIn: this.configService.get<string>(
+        'JWT_REFRESH_EXPIRES_IN',
+      ) as any,
+    });
+
+    // save hashed refresh token to DB
+    await this.userService.addRefreshToken(user._id, refreshToken);
+
     return {
-      accessToken: this.jwtService.sign(payload),
+      accessToken,
+      refreshToken,
     };
   }
 }
