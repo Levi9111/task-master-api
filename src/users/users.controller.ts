@@ -1,4 +1,15 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get, Request, UseGuards } from '@nestjs/common';
+import { UsersService } from './users.service';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
-@Controller('users')
-export class UsersController {}
+@Controller('users') // Base route: /users
+export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
+
+  @UseGuards(JwtAuthGuard) // <-- This protects the route!
+  @Get('me') // Maps to GET /users/me
+  getProfile(@Request() req) {
+    // req.user was populated by the validate() method in our JwtStrategy
+    return req.user;
+  }
+}
