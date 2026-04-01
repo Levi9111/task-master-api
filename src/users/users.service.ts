@@ -34,4 +34,20 @@ export class UsersService {
       $push: { refreshToken: hashedToken }, // Adds to the array for multi-device support
     });
   }
+
+  async getUserIfRefreshTokenMatches(
+    refreshToken: string,
+    userId: string,
+  ): Promise<User | null> {
+    const user = await this.findById(userId);
+    if (!user) return null;
+
+    // Iterate through the array of refresh tokens
+    for (const hashedToken of user.refreshToken) {
+      const isMatch = await bcrypt.compare(refreshToken, hashedToken);
+      if (isMatch) return user;
+    }
+
+    return null;
+  }
 }

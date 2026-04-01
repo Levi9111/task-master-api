@@ -81,4 +81,25 @@ export class AuthService {
       refreshToken,
     };
   }
+
+  async refreshTokens(userId: string, refreshToken: string) {
+    // Verify the token against the DB
+    const user = await this.userService.getUserIfRefreshTokenMatches(
+      refreshToken,
+      userId,
+    );
+
+    if (!user) {
+      throw new UnauthorizedException('Access Denied: Invalid Refresh Token!');
+    }
+
+    // Generate a NEW Access Token
+    const payload = { sub: user._id, email: user.email, role: user.role };
+    const accessToken = this.jwtService.sign(payload);
+
+    // Only returns the access token
+    return {
+      accessToken,
+    };
+  }
 }
