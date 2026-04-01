@@ -17,7 +17,7 @@ export class User extends Document {
   @Prop({ type: [String], default: [] })
   refreshToken: string[];
 
-  @Prop({ type: String, enum: Role, default: Role.Memeber })
+  @Prop({ type: String, enum: Role, default: Role.Member })
   role: Role;
 
   @Prop()

@@ -45,6 +45,6 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async logout(@Request() req, @Body() logoutDto: LogoutDto) {
     // req.user is provided by jwtAuthGuard
-    return this.authService.logout(req.user.useId, logoutDto.refreshToken);
+    return this.authService.logout(req.user.userId, logoutDto.refreshToken);
   }
 }

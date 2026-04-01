@@ -54,7 +54,7 @@ export class UsersService {
   async removeRefreshToken(
     userId: string,
     refreshTokenToRemove: string,
-  ): Promise<void> {
+  ): Promise<User | void> {
     const user = await this.findById(userId);
 
     if (!user) return;
@@ -80,6 +80,8 @@ export class UsersService {
       });
     }
 
-    // await user.save();
+    await user.save();
+
+    return user;
   }
 }
