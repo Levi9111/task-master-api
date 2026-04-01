@@ -23,6 +23,10 @@ export class UsersService {
     return this.userModel.findById(userId).exec();
   }
 
+  async findAll(): Promise<User[]> {
+    return this.userModel.find().select('-password -refreshToken').exec();
+  }
+
   async addRefreshToken(
     userId: string | Types.ObjectId,
     refreshToken: string,
