@@ -13,22 +13,26 @@ import { LoginDto } from './dto/login.dto';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { LogoutDto } from './dto/logout.dto';
+import { Public } from 'src/common/decorators/public.decorator';
 
 @Controller('auth') //Sets the base route '/auth'
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Public()
   @Post('register') // '/auth/register'
   async register(@Body() reigsterDto: RegisterDto) {
     return this.authService.register(reigsterDto);
   }
 
+  @Public()
   @Post('login')
   @HttpCode(HttpStatus.OK) // Changes default 201 Created to 200
   async login(@Body() loginDto: LoginDto) {
     return this.authService.login(loginDto);
   }
 
+  @Public()
   @UseGuards(JwtRefreshGuard)
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
@@ -40,7 +44,6 @@ export class AuthController {
     return this.authService.refreshTokens(userId, refreshToken);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Post('logout')
   @HttpCode(HttpStatus.OK)
   async logout(@Request() req, @Body() logoutDto: LogoutDto) {

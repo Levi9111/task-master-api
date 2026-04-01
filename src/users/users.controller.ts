@@ -6,7 +6,6 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @UseGuards(JwtAuthGuard) // <-- This protects the route!
   @Get('me') // Maps to GET /users/me
   getProfile(@Request() req) {
     // req.user was populated by the validate() method in our JwtStrategy
