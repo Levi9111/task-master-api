@@ -50,4 +50,36 @@ export class UsersService {
 
     return null;
   }
+
+  async removeRefreshToken(
+    userId: string,
+    refreshTokenToRemove: string,
+  ): Promise<void> {
+    const user = await this.findById(userId);
+
+    if (!user) return;
+
+    const remainingTokens: string[] = [];
+    let tokenFound = false;
+
+    for (const hashedToken of user.refreshToken) {
+      const isMatch = await bcrypt.compare(refreshTokenToRemove, hashedToken);
+
+      if (isMatch) {
+        tokenFound = true;
+      } else {
+        remainingTokens.push(hashedToken);
+      }
+    }
+
+    if (tokenFound) {
+      await this.userModel.findByIdAndUpdate(userId, {
+        $set: {
+          refreshToken: remainingTokens,
+        },
+      });
+    }
+
+    // await user.save();
+  }
 }

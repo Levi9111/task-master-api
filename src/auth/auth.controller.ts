@@ -11,6 +11,8 @@ import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { LogoutDto } from './dto/logout.dto';
 
 @Controller('auth') //Sets the base route '/auth'
 export class AuthController {
@@ -36,5 +38,13 @@ export class AuthController {
     const { userId, refreshToken } = req.user;
 
     return this.authService.refreshTokens(userId, refreshToken);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('logout')
+  @HttpCode(HttpStatus.OK)
+  async logout(@Request() req, @Body() logoutDto: LogoutDto) {
+    // req.user is provided by jwtAuthGuard
+    return this.authService.logout(req.user.useId, logoutDto.refreshToken);
   }
 }

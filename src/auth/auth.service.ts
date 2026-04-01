@@ -102,4 +102,13 @@ export class AuthService {
       accessToken,
     };
   }
+
+  async logout(userId: string, refreshToken: string) {
+    await this.userService.removeRefreshToken(userId, refreshToken);
+
+    return {
+      success: true,
+      message: 'Logged out successfully',
+    };
+  }
 }
