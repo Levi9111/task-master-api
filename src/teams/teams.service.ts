@@ -32,4 +32,17 @@ export class TeamsService {
       })
       .exec();
   }
+
+  async findById(id: string): Promise<Team | null> {
+    return this.teamModel.findById(id).exec();
+  }
+
+  async update(
+    teamId: string,
+    updateData: Partial<CreateTeamDto>,
+  ): Promise<Team | null> {
+    return this.teamModel
+      .findByIdAndUpdate(teamId, updateData, { new: true })
+      .exec();
+  }
 }

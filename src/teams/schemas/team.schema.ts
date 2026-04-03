@@ -17,7 +17,7 @@ export class TeamMember {
     enum: TeamRole,
     default: TeamRole.Member,
   })
-  role: TeamMember;
+  role: TeamRole;
 }
 
 export const TeamMemberSchema = SchemaFactory.createForClass(TeamMember);
