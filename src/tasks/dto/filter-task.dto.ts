@@ -13,6 +13,10 @@ export class FilterTaskDto extends PaginationDto {
   priority?: TaskPriority;
 
   @IsOptional()
+  @IsMongoId()
+  assigneeId?: string;
+
+  @IsOptional()
   @IsMongoId() // Validate that it's a valid mongoDB ObjectId
   teamId?: string;
 }
