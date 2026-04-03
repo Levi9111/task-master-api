@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Types } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import { TeamRole } from 'src/common/enums/team-role.enum';
 
 // Define a sub-document for the members array
@@ -38,7 +38,7 @@ export class Team extends Document {
     type: [TeamMemberSchema],
     default: [],
   })
-  member: TeamMember[];
+  members: TeamMember[];
 }
 
 export const TeamSchema = SchemaFactory.createForClass(Team);
