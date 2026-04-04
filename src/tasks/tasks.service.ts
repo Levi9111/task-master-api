@@ -102,4 +102,27 @@ export class TasksService {
       throw new NotFoundException(`Task with ID: ${id} not found`);
     }
   }
+
+  async addAttachment(
+    taskId: string,
+    file: Express.Multer.File,
+  ): Promise<Task> {
+    const task = await this.findOne(taskId);
+
+    const { filename, originalname, mimetype, size, path } = file;
+
+    // Creae Metadata object
+    const attachmentMetadata = {
+      filename,
+      originalname,
+      mimetype,
+      size,
+      path,
+    };
+
+    // push to task's attachment array and save
+    task.attachments.push(attachmentMetadata);
+
+    return task.save();
+  }
 }
