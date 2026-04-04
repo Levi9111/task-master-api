@@ -47,6 +47,7 @@ export class TasksService {
         .skip(skip)
         .limit(limit)
         .sort({ createdAt: -1 })
+        .populate('assigneeId', 'name email')
         .exec(),
       this.taskModel.countDocuments(query).exec(),
     ]);
