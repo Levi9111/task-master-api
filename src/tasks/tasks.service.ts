@@ -12,11 +12,17 @@ export class TasksService {
   ) {}
 
   async create(createTaskDto: CreateTaskDto, userId: string): Promise<void> {
+    console.log('Create task');
+
     const newTask = new this.taskModel({
       ...createTaskDto,
       // If the frontend didn't specify an assignee, default to the user creating the task
       assigneeId: createTaskDto.assigneeId || userId,
     });
+
+    console.log(newTask);
+
+    await newTask.save();
   }
 
   async findAll(filterDto: FilterTaskDto) {
