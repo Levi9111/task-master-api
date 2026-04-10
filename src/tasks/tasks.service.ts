@@ -120,9 +120,18 @@ export class TasksService {
       path,
     };
 
-    // push to task's attachment array and save
-    task.attachments.push(attachmentMetadata);
+    const updatedTask = await this.taskModel
+      .findByIdAndUpdate(
+        taskId,
+        { $push: { attachments: attachmentMetadata } },
+        { returnDocument: 'after' }, // Return the updated document
+      )
+      .exec();
 
-    return task.save();
+    if (!updatedTask) {
+      throw new NotFoundException(`Task with ID ${taskId} not found`);
+    }
+
+    return updatedTask;
   }
 }

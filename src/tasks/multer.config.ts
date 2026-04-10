@@ -27,3 +27,5 @@ export const multerOptions = {
     fileSize: 10 * 1024 * 1024, // 10MB limit
   },
 };
+
+// TODO: cloudinary path is not being stored in db
